@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Portail d'Applications</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0f0a14',
+                        cardbg: 'rgba(26, 18, 35, 0.7)',
+                        accentPink: '#ff2a75',
+                        accentPurple: '#9d4edd',
+                        accentGold: '#dfa63b'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f0a14;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(157, 78, 221, 0.2), transparent 70%),
+                radial-gradient(circle at 100% 100%, rgba(255, 42, 117, 0.15), transparent 50%);
+            min-height: 100vh;
+            color: #f1e6f5;
+        }
+
+        .glass-card {
+            background: rgba(26, 18, 35, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 42, 117, 0.4);
+            box-shadow: 0 12px 30px rgba(255, 42, 117, 0.2);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen justify-between items-center max-w-4xl mx-auto px-4 py-8">
+
+    <!-- EN-TÊTE -->
+    <header class="w-full text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-amber-300 font-semibold mb-3">
+            ✨ Collection Personnelle d'Apps Web
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-pink-200 to-purple-400 tracking-tight">
+            Mon Portail d'Apps
+        </h1>
+        <p class="text-white/60 text-sm mt-2 max-w-md mx-auto font-light">
+            Retrouvez tous vos jeux, outils et espaces interactifs hébergés au même endroit.
+        </p>
+    </header>
+
+    <!-- BARRE DE RECHERCHE ET FILTRES -->
+    <div class="w-full mb-8 flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div class="relative w-full sm:w-72">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40"></i>
+            <input type="text" id="searchInput" oninput="filterApps()" placeholder="Rechercher une application..." 
+                class="w-full bg-white/5 border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-accentPink transition-colors">
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+            <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/20 transition-all">
+                Toutes
+            </button>
+            <button onclick="setFilter('jeux')" id="filter-jeux" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-white/60 hover:text-white transition-all">
+                🎮 Jeux & Soirées
+            </button>
+            <button onclick="setFilter('couple')" id="filter-couple" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-white/60 hover:text-white transition-all">
+                ❤️ Couple & Intimité
+            </button>
+        </div>
+    </div>
+
+    <!-- GRILLE D'APPLICATIONS -->
+    <main class="w-full flex-1">
+        <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Rempli dynamiquement par JS -->
+        </div>
+
+        <!-- Message aucun résultat -->
+        <div id="noResults" class="hidden text-center py-12">
+            <i data-lucide="frown" class="w-10 h-10 text-white/30 mx-auto mb-2"></i>
+            <p class="text-white/50 text-sm">Aucune application ne correspond à votre recherche.</p>
+        </div>
+    </main>
+
+    <!-- PIED DE PAGE -->
+    <footer class="w-full mt-12 pt-6 border-t border-white/10 text-center text-xs text-white/40 font-light">
+        Hébergé gratuitement avec ❤️ sur GitHub Pages
+    </footer>
+
+    <script>
+        // LISTE DE VOS APPLICATIONS (Ajoutez-en autant que vous voulez ici)
+        const APPS = [
+            {
+                id: 'piment-intimite',
+                title: 'Piment & Intimité',
+                category: 'couple',
+                categoryLabel: 'Couple & Romance',
+                badgeColor: 'bg-pink-500/20 text-pink-300 border-pink-500/30',
+                description: 'Rituel quotidien pour couple : 1 position par jour avec schémas, action/vérité osé et défis romantiques.',
+                icon: 'heart-handshake',
+                iconGradient: 'from-pink-500 to-purple-600',
+                url: './piment_intimite.html' // Chemin relatif vers le fichier HTML dans le dépôt
+            },
+            {
+                id: 'pyramide-express',
+                title: 'Pyramide Express',
+                category: 'jeux',
+                categoryLabel: 'Jeu de Taverne',
+                badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+                description: 'Jeu de bluff et de mémoire style Taverne Pirate. Affrontez vos amis, distribuez des chopes et démasquez les menteurs !',
+                icon: 'beer',
+                iconGradient: 'from-amber-600 to-red-700',
+                url: './pyramide_express.html' // Chemin relatif vers le fichier HTML dans le dépôt
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderApps() {
+            const grid = document.getElementById('appsGrid');
+            const noResults = document.getElementById('noResults');
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            grid.innerHTML = '';
+            let count = 0;
+
+            APPS.forEach(app => {
+                const matchesFilter = (currentFilter === 'all' || app.category === currentFilter);
+                const matchesSearch = app.title.toLowerCase().includes(search) || app.description.toLowerCase().includes(search);
+
+                if (matchesFilter && matchesSearch) {
+                    count++;
+                    const card = document.createElement('div');
+                    card.className = 'glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden group';
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr ${app.iconGradient} flex items-center justify-center text-white shadow-lg">
+                                    <i data-lucide="${app.icon}" class="w-6 h-6"></i>
+                                </div>
+                                <span class="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border ${app.badgeColor}">
+                                    ${app.categoryLabel}
+                                </span>
+                            </div>
+
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-accentPink transition-colors">
+                                ${app.title}
+                            </h3>
+                            <p class="text-white/70 text-xs leading-relaxed font-light mb-6">
+                                ${app.description}
+                            </p>
+                        </div>
+
+                        <a href="${app.url}" class="w-full py-3 rounded-2xl bg-white/10 hover:bg-gradient-to-r hover:from-accentPink hover:to-accentPurple text-white text-xs font-semibold tracking-wider transition-all duration-300 flex items-center justify-center gap-2 border border-white/10 group-hover:border-transparent">
+                            LANCER L'APPLICATION <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    `;
+                    grid.appendChild(card);
+                }
+            });
+
+            if (count === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            lucide.createIcons();
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-white/60 hover:text-white transition-all";
+            });
+            const activeBtn = document.getElementById('filter-' + filter);
+            if (activeBtn) {
+                activeBtn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/20 transition-all";
+            }
+            renderApps();
+        }
+
+        function filterApps() {
+            renderApps();
+        }
+
+        window.onload = () => {
+            renderApps();
+        };
+    </script>
+</body>
+</html>
